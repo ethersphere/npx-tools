@@ -1,0 +1,22 @@
+{
+    "name": "create-swarm-app",
+    "version": "1.0.1",
+    "bin": {
+        "create-swarm-app": "./dist/index.js"
+    },
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "cafe-utility": "^22.2.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.11",
+        "typescript": "^5.5.3"
+    }
+}

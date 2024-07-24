@@ -14,3 +14,11 @@ Prints an ultra-light Bee configuration file to stdout.
 mkdir -p /etc/bee
 npx bee-yaml > /etc/bee/bee.yaml
 ```
+
+# create-swarm-app
+
+Scaffolds a browser or Node.js application. Supports React (Vite) and Node.js (CommonJS, ESM, TypeScript).
+
+```
+npx create-swarm-app my-app vite-tsx
+```
