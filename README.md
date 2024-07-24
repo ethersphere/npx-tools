@@ -4,6 +4,8 @@ Creates docker-compose.yml and directory layout for multiple Bee nodes. Grabs wa
 
 ```
 npx bee-docker 3
+
+docker compose up
 ```
 
 # bee-yaml
@@ -12,6 +14,7 @@ Prints an ultra-light Bee configuration file to stdout.
 
 ```
 mkdir -p /etc/bee
+
 npx bee-yaml > /etc/bee/bee.yaml
 ```
 
@@ -21,4 +24,8 @@ Scaffolds a browser or Node.js application. Supports React (Vite) and Node.js (C
 
 ```
 npx create-swarm-app my-app vite-tsx
+
+cd my-app
+npm install
+npm start
 ```
