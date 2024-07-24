@@ -1,0 +1,16 @@
+{
+    "name": "bee-docker",
+    "version": "1.2.1",
+    "description": "",
+    "bin": {
+        "bee-docker": "./index.js"
+    },
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@ethersproject/wallet": "^5.7.0"
+    }
+}
