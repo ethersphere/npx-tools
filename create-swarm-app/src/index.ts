@@ -37,7 +37,7 @@ async function main(projectName: string, type: string) {
         scripts: {},
         license: 'ISC',
         dependencies: {
-            '@ethersphere/bee-js': '^7.1.0'
+            '@ethersphere/bee-js': '^7.1.1'
         },
         devDependencies: {}
     }
@@ -221,7 +221,7 @@ if (rootElement) {
                   location.startsWith('.') && codeType === 'esmodules' ? '.js' : ''
               }'`
     }
-    const index = `${makeImport(['Bee'], '@ethersphere/bee-js')}
+    const indexTs = `${makeImport(['Bee'], '@ethersphere/bee-js')}
 ${makeImport(['BEE_HOST'], './config')}
 
 main()
@@ -259,10 +259,10 @@ async function getOrCreatePostageBatch(${codeType === 'typescript' ? 'bee: Bee' 
     if (projectType === 'node') {
         if (codeType === 'typescript') {
             writeFileSync(`${projectName}/tsconfig.json`, nodeTsConfig)
-            writeFileSync(`${projectName}/src/index.ts`, index)
+            writeFileSync(`${projectName}/src/index.ts`, indexTs)
             writeFileSync(`${projectName}/src/config.ts`, config)
         } else {
-            writeFileSync(`${projectName}/src/index.js`, index)
+            writeFileSync(`${projectName}/src/index.js`, indexTs)
             writeFileSync(`${projectName}/src/config.js`, config)
         }
     }
