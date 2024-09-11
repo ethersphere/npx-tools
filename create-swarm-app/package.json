@@ -1,6 +1,6 @@
 {
     "name": "create-swarm-app",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "bin": {
         "create-swarm-app": "./dist/index.js"
     },
