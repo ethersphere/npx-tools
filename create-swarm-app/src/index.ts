@@ -37,7 +37,7 @@ async function main(projectName: string, type: string) {
         scripts: {},
         license: 'ISC',
         dependencies: {
-            '@ethersphere/bee-js': '^7.1.2'
+            '@ethersphere/bee-js': '^8.0.2'
         },
         devDependencies: {}
     }
