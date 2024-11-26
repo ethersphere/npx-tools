@@ -1,20 +1,29 @@
 #!/usr/bin/env node
 
-import { Strings } from 'cafe-utility'
+import { Arrays, Strings } from 'cafe-utility'
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { exit } from 'process'
 
 type CodeType = 'typescript' | 'esmodules' | 'commonjs'
 type ProjectType = 'node' | 'vite'
 
-main(process.argv[2], process.argv[3])
+main(
+    process.argv[2],
+    process.argv[3],
+    Arrays.getArgument(process.argv, 'host'),
+    Arrays.getArgument(process.argv, 'auth')
+)
 
-async function main(projectName: string, type: string) {
+async function main(projectName: string, type: string, host?: string | null, auth?: string | null) {
     if (!projectName || !type) {
         console.error('Usage:   npm init swarm-app <name> <type>')
         console.error('Example: npm init swarm-app my-app node-ts')
         console.error('')
         console.error('Possible types: node, node-esm, node-ts, vite-tsx')
+        console.error('')
+        console.error('Optional flags:')
+        console.error('--host <url> Bee node URL')
+        console.error('--auth <key> Bee node API key')
         exit(1)
     }
     if (!['node', 'node-esm', 'node-ts', 'vite-tsx'].includes(type)) {
@@ -37,7 +46,7 @@ async function main(projectName: string, type: string) {
         scripts: {},
         license: 'ISC',
         dependencies: {
-            '@ethersphere/bee-js': '^8.3.0'
+            '@ethersphere/bee-js': '^8.3.1'
         },
         devDependencies: {}
     }
@@ -72,10 +81,13 @@ async function main(projectName: string, type: string) {
         packageJson.scripts.start = 'node --experimental-specifier-resolution=node src/index.js'
     }
 
+    const beeHost = host ?? 'http://localhost:1633'
+    const beeInit = auth ? `new Bee(BEE_HOST, { headers: { Authorization: '${auth}' } })` : `new Bee(BEE_HOST)`
+
     const config =
         codeType === 'commonjs'
-            ? `module.exports = { BEE_HOST: 'http://localhost:1633' }\n`
-            : `export const BEE_HOST = 'http://localhost:1633'\n`
+            ? `module.exports = { BEE_HOST: '${beeHost}' }\n`
+            : `export const BEE_HOST = '${beeHost}'\n`
 
     const appTsx = `import { BatchId, Bee } from '@ethersphere/bee-js'
 import { useState } from 'react'
@@ -87,9 +99,9 @@ export function App() {
     const [fileList, setFileList] = useState<FileList | null>(null)
     const [swarmHash, setSwarmHash] = useState<string | null>(null)
 
-    async function getOrCreatePostageBatch() {
-        const bee = new Bee(BEE_HOST)
+    const bee = ${beeInit}
 
+    async function getOrCreatePostageBatch() {
         const batches = await bee.getAllPostageBatch()
         const usable = batches.find(x => x.usable)
 
@@ -104,7 +116,6 @@ export function App() {
         if (!batchId) {
             return
         }
-        const bee = new Bee(BEE_HOST)
         const result = await bee.uploadFile(batchId, file)
         setSwarmHash(result.reference)
         setFile(null)
@@ -114,7 +125,6 @@ export function App() {
         if (!batchId || !fileList) {
             return
         }
-        const bee = new Bee(BEE_HOST)
         const result = await bee.uploadFiles(batchId, fileList)
         setSwarmHash(result.reference)
         setFileList(null)
@@ -227,7 +237,7 @@ ${makeImport(['BEE_HOST'], './config')}
 main()
 
 async function main() {
-    const bee = new Bee(BEE_HOST)
+    const bee = ${beeInit}
     const batchId = await getOrCreatePostageBatch(bee)
     console.log('Batch ID', batchId)
     const data = 'Hello, world! The current time is ' + new Date().toLocaleString()
